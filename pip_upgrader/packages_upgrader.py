@@ -80,7 +80,7 @@ class PackagesUpgrader(object):
         original_line = line
         pin_type = r'[>=]=' if self.check_gte else '=='
 
-        pattern = r'\b({package}(?:\[\w*\])?{pin_type})[a-zA-Z0-9\.]+\b'.format(
+        pattern = r'^({package}(?:\[[^\]]+\])?\s*{pin_type})\s*[\w\.]+'.format(
             package=re.escape(package['name']),
             pin_type=pin_type
         )

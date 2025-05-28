@@ -197,10 +197,12 @@ class PackagesStatusDetector(object):
 
         data = response.json()
         all_versions = [version.parse(vers) for vers in data['releases'].keys()]
-        if not self._prerelease:
-            filtered_versions = [vers for vers in all_versions if not vers.is_prerelease and not vers.is_postrelease]
-        else:
+        # Include pre/post-releases *only* if explicitly allowed, OR if the pinned version is a pre/post-release
+        if self._prerelease or current_version.is_prerelease or current_version.is_postrelease:
             filtered_versions = all_versions
+        else:
+            filtered_versions = [vers for vers in all_versions if not vers.is_prerelease and not vers.is_postrelease]
+
 
         if not filtered_versions:  # pragma: nocover
             return False, 'error while parsing version'
